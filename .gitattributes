@@ -1,0 +1,8 @@
+# Finais de linha: LF no repositório; scripts de shell sempre LF, scripts .bat sempre CRLF.
+* text=auto
+gradlew text eol=lf
+*.sh text eol=lf
+*.bat text eol=crlf
+*.jar binary
+*.webp binary
+*.png binary
