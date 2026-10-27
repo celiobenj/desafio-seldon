@@ -1,0 +1,48 @@
+# Configuração do detekt (análise estática).
+# Parte da configuração padrão (buildUponDefaultConfig) e altera apenas o que está abaixo.
+# Qualquer achado falha o build (maxIssues: 0).
+
+build:
+  maxIssues: 0
+
+style:
+  # Fronteira da arquitetura: o pacote domain é Kotlin puro.
+  # Não conhece Android, JSON nem arquivos (REQ-04). Vale só para arquivos em domain/.
+  ForbiddenImport:
+    active: true
+    includes: ['**/domain/**']
+    imports:
+      - value: 'android.*'
+        reason: 'domain é Kotlin puro e não pode depender do Android.'
+      - value: 'androidx.*'
+        reason: 'domain é Kotlin puro e não pode depender do Android.'
+      - value: 'kotlinx.serialization.*'
+        reason: 'domain não conhece JSON; a leitura do arquivo fica na camada data.'
+      - value: 'java.io.*'
+        reason: 'domain não conhece arquivos; a leitura do arquivo fica na camada data.'
+
+  # Números literais são esperados nos testes (valores de fronteira escritos de propósito),
+  # nas coordenadas de desenho dos ícones (grade de 24 dp) e nas dimensões e cores do Compose
+  # (dp, sp, hex), que já ficam em propriedades nomeadas ou dentro de funções @Composable.
+  MagicNumber:
+    excludes: ['**/test/**', '**/androidTest/**', '**/ui/theme/AppIcons.kt']
+    ignorePropertyDeclaration: true
+    ignoreNamedArgument: true
+    ignoreAnnotated: ['Composable']
+
+  # ClassifyDevice tem uma saída por estado da regra (INDETERMINADO, CRITICO, ATENCAO, OK),
+  # na ordem do PROTOCOLO.md. Mais retornos que o padrão (2) deixam essa ordem explícita.
+  ReturnCount:
+    max: 4
+
+naming:
+  # Por convenção do Compose, funções @Composable que desenham interface usam PascalCase.
+  FunctionNaming:
+    ignoreAnnotated: ['Composable']
+
+complexity:
+  # Telas Compose recebem estado e vários eventos (callbacks) como parâmetros, de propósito,
+  # para não dependerem do ViewModel. Parâmetros com valor padrão não contam.
+  LongParameterList:
+    ignoreDefaultParameters: true
+    ignoreAnnotated: ['Composable']
