@@ -1,4 +1,5 @@
-# Integração contínua: roda a suíte de testes na JVM (sem emulador) a cada push.
+# Integração contínua a cada push: análise estática, verificações de fronteira e testes na JVM
+# (sem emulador). Cada verificação é um passo separado, para a falha apontar a causa.
 name: CI
 
 on:
@@ -22,6 +23,32 @@ jobs:
       # Cache das dependências e da distribuição do Gradle entre execuções.
       - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v6
+
+      - name: Análise estática (detekt)
+        run: ./gradlew :app:detekt
+
+      # REQ-04: a regra de negócio é Kotlin puro. Cobre android.* e androidx.*.
+      - name: Fronteira - domain sem import android
+        run: |
+          if grep -rn "import android" app/src/main/java/dev/celiobenj/seldonfleet/domain/; then
+            echo "::error::domain/ não pode importar android.* nem androidx.*"
+            exit 1
+          fi
+          echo "domain/ sem import android"
+
+      # REQ-01: sem acesso à rede. Confere o manifesto do código e o mesclado com as bibliotecas.
+      - name: Manifesto sem permissão INTERNET
+        run: |
+          ./gradlew :app:processDebugMainManifest
+          merged=$(find app/build/intermediates -path "*merged_manifest*" -name AndroidManifest.xml | head -n 1)
+          test -n "$merged" || { echo "::error::manifesto mesclado não encontrado"; exit 1; }
+          for manifest in app/src/main/AndroidManifest.xml "$merged"; do
+            if grep -n "android.permission.INTERNET" "$manifest"; then
+              echo "::error::$manifest declara android.permission.INTERNET"
+              exit 1
+            fi
+            echo "$manifest sem INTERNET"
+          done
 
       - name: Testes unitários (JVM)
         run: ./gradlew test
