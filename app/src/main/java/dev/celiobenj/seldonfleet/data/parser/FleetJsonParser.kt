@@ -10,7 +10,7 @@ import kotlinx.serialization.json.Json
  */
 class FleetJsonParser {
 
-    // Chaves que o app não conhece são ignoradas, para tolerar versões futuras do arquivo.
+    // Chaves que o app não conhece são ignoradas e não invalidam o arquivo.
     private val json = Json { ignoreUnknownKeys = true }
 
     /**

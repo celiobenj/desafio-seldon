@@ -73,14 +73,6 @@ object AppIcons {
         }
     }
 
-    val ChevronRight: ImageVector by lazy {
-        strokeIcon("ChevronRight") {
-            moveTo(9f, 6f)
-            lineTo(15f, 12f)
-            lineTo(9f, 18f)
-        }
-    }
-
     val Check: ImageVector by lazy {
         strokeIcon("Check") {
             moveTo(5f, 12.5f)
