@@ -6,29 +6,29 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Set of Material typography styles to start with
-val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
+private val Default = Typography()
+
+/**
+ * Tipografia padrão do Material 3 com a fonte do sistema. Única mudança: rótulos pequenos
+ * sobem de 11 para 12 sp (mínimo para rótulos); o corpo de texto usa no mínimo 14 sp.
+ */
+val Typography = Default.copy(
+    labelSmall = Default.labelSmall.copy(fontSize = 12.sp, lineHeight = 16.sp),
+)
+
+/** IDs de dispositivo: monoespaçada do sistema, com ênfase. */
+val DeviceIdStyle = TextStyle(
+    fontFamily = FontFamily.Monospace,
+    fontWeight = FontWeight.Bold,
+    fontSize = 16.sp,
+    lineHeight = 22.sp,
+)
+
+/** Rótulos técnicos em caixa alta (chips, subtítulos, títulos de atributo). */
+val MonoLabelStyle = TextStyle(
+    fontFamily = FontFamily.Monospace,
+    fontWeight = FontWeight.Medium,
+    fontSize = 12.sp,
+    lineHeight = 16.sp,
+    letterSpacing = 0.5.sp,
 )
