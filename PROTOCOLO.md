@@ -105,6 +105,7 @@ O arquivo recebido não exercita todos os casos previstos pelo esquema. O app tr
 | `energyUnit` desconhecida | `INDETERMINADO` (energia indisponível) |
 | `lastSeen` ausente ou com formato inválido | Exibido como "—"; não afeta a classificação |
 | Chaves extras no JSON | Ignoradas |
+| Lista `devices` ausente na raiz do arquivo | Arquivo inválido: tela de erro explícita, sem encerrar o app |
 | Campo obrigatório ausente em algum registro (`id`, `model`, `soc`, `tier`, `ramMb`, `androidApi`, `batteryLevelPct`, `energyUnit`, `jankFramesPct`, `crashCount7d`) ou `tier` diferente de `low`, `mid` e `high` | Arquivo inválido: tela de erro explícita, sem encerrar o app |
 | Arquivo ausente, ilegível ou JSON inválido | Tela de erro explícita, sem encerrar o app |
 
