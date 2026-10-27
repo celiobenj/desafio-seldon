@@ -129,7 +129,10 @@ class JustificationFormatterTest {
 
     @Test
     fun `tela 0 cita o valor invalido`() {
-        assertEquals("Sem dados suficientes: tempo de tela ligada inválido (0 min).", justify(device(screenOnMinutes = 0)))
+        assertEquals(
+            "Sem dados suficientes: tempo de tela ligada inválido (0 min).",
+            justify(device(screenOnMinutes = 0)),
+        )
     }
 
     @Test

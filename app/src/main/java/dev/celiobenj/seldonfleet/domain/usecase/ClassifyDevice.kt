@@ -22,12 +22,12 @@ class ClassifyDevice(private val thresholds: Thresholds = Thresholds()) {
 
         // Derivadas: só calculadas quando os divisores são válidos (nunca NaN/Infinity).
         val absoluteDrain = if (energyMah != null && screenOnMinutes != null) {
-            energyMah / (screenOnMinutes / 60.0)
+            energyMah / (screenOnMinutes / MINUTES_PER_HOUR)
         } else {
             null
         }
         val relativeDrain = if (absoluteDrain != null && capacityMah != null) {
-            absoluteDrain / capacityMah * 100
+            absoluteDrain / capacityMah * PERCENT
         } else {
             null
         }
@@ -87,5 +87,10 @@ class ClassifyDevice(private val thresholds: Thresholds = Thresholds()) {
         if (device.jankFramesPct >= jankLimit) {
             add(Signal.DroppedFrames(device.jankFramesPct, jankLimit))
         }
+    }
+
+    private companion object {
+        const val MINUTES_PER_HOUR = 60.0
+        const val PERCENT = 100.0
     }
 }

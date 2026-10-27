@@ -19,13 +19,13 @@ import androidx.compose.ui.unit.dp
 import dev.celiobenj.seldonfleet.domain.model.DeviceStatus
 import dev.celiobenj.seldonfleet.ui.presentation.label
 import dev.celiobenj.seldonfleet.ui.presentation.spokenDescription
-import dev.celiobenj.seldonfleet.ui.presentation.style
+import dev.celiobenj.seldonfleet.ui.presentation.presentation
 import dev.celiobenj.seldonfleet.ui.theme.MonoLabelStyle
 
 /** Chip de status: ícone + rótulo, com borda e fundo na cor do estado. Lido como "Status: Crítico". */
 @Composable
 fun StatusChip(status: DeviceStatus, modifier: Modifier = Modifier) {
-    val style = status.style()
+    val style = status.presentation()
     val shape = RoundedCornerShape(8.dp)
     Row(
         modifier = modifier

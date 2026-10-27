@@ -47,7 +47,7 @@ import dev.celiobenj.seldonfleet.ui.presentation.formatDecimal
 import dev.celiobenj.seldonfleet.ui.presentation.formatLastSeen
 import dev.celiobenj.seldonfleet.ui.presentation.label
 import dev.celiobenj.seldonfleet.ui.presentation.spokenDescription
-import dev.celiobenj.seldonfleet.ui.presentation.style
+import dev.celiobenj.seldonfleet.ui.presentation.presentation
 import dev.celiobenj.seldonfleet.ui.theme.AppIcons
 import dev.celiobenj.seldonfleet.ui.theme.Cerulean
 import dev.celiobenj.seldonfleet.ui.theme.DeviceIdStyle
@@ -151,7 +151,7 @@ private fun DetailContent(state: DeviceDetailUiState.Content, onToggleFavorite: 
 @Composable
 private fun StatusCard(classification: Classification, justification: String) {
     val status = classification.status
-    val style = status.style()
+    val style = status.presentation()
     Card(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = style.container),
@@ -201,7 +201,12 @@ private fun AttributesGrid(device: Device, classification: Classification) {
             if (index > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Row(Modifier.height(IntrinsicSize.Min)) {
                 row.forEachIndexed { column, (label, value) ->
-                    if (column > 0) VerticalDivider(color = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.fillMaxHeight())
+                    if (column > 0) {
+                        VerticalDivider(
+                            color = MaterialTheme.colorScheme.outlineVariant,
+                            modifier = Modifier.fillMaxHeight(),
+                        )
+                    }
                     AttributeCell(label, value, Modifier.weight(1f))
                 }
             }

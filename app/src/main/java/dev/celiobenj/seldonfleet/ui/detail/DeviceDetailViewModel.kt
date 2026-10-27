@@ -53,7 +53,7 @@ class DeviceDetailViewModel(
                     isFavorite = deviceId in favoriteIds,
                 )
             }
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), DeviceDetailUiState.Loading)
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS), DeviceDetailUiState.Loading)
 
     init {
         load()
@@ -80,6 +80,9 @@ class DeviceDetailViewModel(
     }
 
     companion object {
+        // mantém o fluxo ativo por 5 s sem observadores (ex.: rotação de tela)
+        private const val STOP_TIMEOUT_MS = 5_000L
+
         /** Fábrica que entrega o id e as dependências pelo construtor (injeção manual). */
         fun factory(
             deviceId: String,

@@ -48,8 +48,7 @@ class FleetListViewModel(
             }
         }.stateIn(
             scope = viewModelScope,
-            // mantém o fluxo ativo por 5 s sem observadores (ex.: rotação de tela)
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
             initialValue = FleetListUiState.Loading,
         )
 
@@ -118,6 +117,9 @@ class FleetListViewModel(
     }
 
     companion object {
+        // mantém o fluxo ativo por 5 s sem observadores (ex.: rotação de tela)
+        private const val STOP_TIMEOUT_MS = 5_000L
+
         /** Fábrica que entrega as dependências pelo construtor (injeção manual). */
         fun factory(
             deviceRepository: DeviceRepository,
