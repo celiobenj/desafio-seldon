@@ -138,6 +138,65 @@ class FleetListViewModelTest {
         assertTrue(state().content().items.isEmpty())
     }
 
+    // ---------- Próximo / anterior (gesto de arrastar) ----------
+
+    @Test
+    fun `proximo percorre TODOS, OK, ATENCAO, CRITICO e SEM DADOS e para na ultima ponta`() = runTest {
+        val viewModel = viewModel()
+        val state = observe(viewModel)
+        val visited = mutableListOf(state().content().selectedFilter)
+        repeat(5) {
+            viewModel.selectNextFilter()
+            visited += state().content().selectedFilter
+        }
+        assertEquals(
+            listOf(
+                null,
+                DeviceStatus.OK,
+                DeviceStatus.ATENCAO,
+                DeviceStatus.CRITICO,
+                DeviceStatus.INDETERMINADO,
+                // não dá a volta: continua no último
+                DeviceStatus.INDETERMINADO,
+            ),
+            visited,
+        )
+    }
+
+    @Test
+    fun `anterior volta um filtro e para em TODOS`() = runTest {
+        val viewModel = viewModel()
+        val state = observe(viewModel)
+
+        viewModel.selectPreviousFilter()
+        assertEquals(null, state().content().selectedFilter)
+
+        viewModel.selectFilter(DeviceStatus.CRITICO)
+        viewModel.selectPreviousFilter()
+        assertEquals(DeviceStatus.ATENCAO, state().content().selectedFilter)
+        viewModel.selectPreviousFilter()
+        viewModel.selectPreviousFilter()
+        viewModel.selectPreviousFilter()
+        assertEquals(null, state().content().selectedFilter)
+    }
+
+    @Test
+    fun `ao trocar de filtro pelo gesto a lista e as contagens continuam coerentes`() = runTest {
+        val viewModel = viewModel()
+        val state = observe(viewModel)
+        val counts = state().content().counts
+
+        repeat(4) {
+            viewModel.selectNextFilter()
+            val content = state().content()
+            val filter = content.selectedFilter!!
+            assertTrue(content.items.all { it.status == filter })
+            assertEquals(counts[filter], content.items.size)
+            assertEquals(counts, content.counts)
+            assertEquals(content.totalCount, content.counts.values.sum())
+        }
+    }
+
     // ---------- Erro ----------
 
     @Test

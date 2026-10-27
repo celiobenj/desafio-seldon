@@ -22,6 +22,9 @@ sealed interface FleetListUiState {
     ) : FleetListUiState
 }
 
+/** Ordem dos filtros, usada pelos chips e pelo gesto de arrastar: TODOS (null) e depois cada status. */
+val FILTER_ORDER: List<DeviceStatus?> = listOf(null) + DeviceStatus.entries
+
 /** Uma linha da lista. */
 data class DeviceListItem(
     val id: String,

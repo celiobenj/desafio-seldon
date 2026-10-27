@@ -61,6 +61,19 @@ class FleetListViewModel(
         selectedFilter.value = status
     }
 
+    /** Avança um filtro na ordem de [FILTER_ORDER]; no último, não faz nada. */
+    fun selectNextFilter() = moveFilter(+1)
+
+    /** Volta um filtro na ordem de [FILTER_ORDER]; em TODOS, não faz nada. */
+    fun selectPreviousFilter() = moveFilter(-1)
+
+    private fun moveFilter(step: Int) {
+        val target = FILTER_ORDER.indexOf(selectedFilter.value) + step
+        if (target in FILTER_ORDER.indices) {
+            selectedFilter.value = FILTER_ORDER[target]
+        }
+    }
+
     /** Relê o arquivo (botão "Tentar de novo"). */
     fun retry() = load()
 
